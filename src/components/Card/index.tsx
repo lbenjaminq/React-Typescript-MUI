@@ -2,24 +2,25 @@ import { Button, Card, CardActions, CardContent, CardMedia, Divider, Typography 
 import React from 'react'
 
 type CharacterType = {
-  name:string
-  img:string
-  status:string
+  author:string
+  urlToImage:string
+  content:string
 }
 
-export const CardComponent: React.FC<CharacterType> = ({name,img,status}) => {
+export const CardComponent: React.FC<CharacterType> = ({author,urlToImage,content}) => {
   return (
       <Card sx={{minHeight:400}}>
         <CardMedia
           component="img"
           height="194"
-          image={img}
-          alt={name}
+          image={urlToImage}
+          alt={author}
+          loading="lazy"
         />
         <CardContent>
-          <Typography variant="h4">{name}</Typography>
+          <Typography variant="h4">{author}</Typography>
           <Divider/>
-          <Typography sx={{mt:2}}>{status}</Typography>
+          <Typography sx={{mt:2}}>{content}</Typography>
         </CardContent>
         <CardActions>
           <Button size="small" variant='contained'>

@@ -2,16 +2,29 @@ import React,{ useEffect, useState } from 'react'
 import { Container, Button, Grid } from '@mui/material'
 import { CardComponent, HeaderComponent } from '../../components'
 import { characters } from '../../api/characters'
-import { CharacterType } from './Interface/character.interface'
+import { AppleType } from './Interface/apple.interface'
+
+enum Status {
+  PENDING= "PENDING",
+  SUCCESS= "SUCCESS",
+  REJECTED= "REJECTED"
+}
 
 export const HomePage:React.FC<{}> = () => {
 
-  const [allCharacters,setAllCharacters] = useState<CharacterType[] | null>(null)
-  
+  const [allNotices,setAllNotices] = useState<AppleType[]>([])
+  const [status,setStatus] = useState<Status>(Status.PENDING)
+
   useEffect(()=>{
-    characters.getAll({page:1})
-    .then((response)=> setAllCharacters(response.data.results))
-    .catch((error)=> console.log(error))
+    characters.getAll()
+    .then((response)=>{
+      setStatus(Status.SUCCESS)
+      setAllNotices(response.data.articles)
+    })
+    .catch((error)=> {
+      setStatus(Status.REJECTED)
+      console.log(error)
+    })
   },[])
 
   return (
@@ -23,17 +36,11 @@ export const HomePage:React.FC<{}> = () => {
         <Button>Show alert</Button>
         <div>
           {
-            allCharacters?.length !== 0 ? (
+            status === Status.SUCCESS ? (
               <Grid container spacing={2} direction="row">
-                {
-                  allCharacters?.map((character)=>(
-                    <Grid item xs={3}>
-                      <CardComponent  key={character.id} name={character.name}
-                        img={character.image} status={character.status}
-                      />
-                    </Grid>
-                  ))
-                }
+                {allNotices.map((notice)=>(
+                  <CardComponent author={notice.author} urlToImage={notice.urlToImage} content={notice.content}/>
+                ))}
               </Grid>
             ) : ""
           }
