@@ -13,7 +13,7 @@ export const Navbar: React.FC<{}> = () => {
           <Container maxWidth="xl">
             <Grid container direction="row" justifyContent="space-between" alignItems="center">
               <Grid item>
-                <Typography>Benja</Typography>
+                <Typography>BTC</Typography>
               </Grid>
               <Grid item>
                 <Stack direction="row" spacing={2}>

@@ -1,4 +1,4 @@
-export interface AppleType {
+export interface NoticeType {
   source:      Source;
   author:      string;
   title:       string;

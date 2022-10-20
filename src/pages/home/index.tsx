@@ -1,50 +1,57 @@
-import React,{ useEffect, useState } from 'react'
-import { Container, Button, Grid } from '@mui/material'
-import { CardComponent, HeaderComponent } from '../../components'
-import { characters } from '../../api/characters'
-import { AppleType } from './Interface/apple.interface'
+import React, { useEffect, useState } from "react";
+import { Container, Button, Grid } from "@mui/material";
+import { CardComponent, HeaderComponent } from "../../components";
+import { characters } from "../../api/characters";
+import { NoticeType } from "./Interface/notice.interface";
 
 enum Status {
-  PENDING= "PENDING",
-  SUCCESS= "SUCCESS",
-  REJECTED= "REJECTED"
+  PENDING = "PENDING",
+  SUCCESS = "SUCCESS",
+  REJECTED = "REJECTED",
 }
 
-export const HomePage:React.FC<{}> = () => {
+export const HomePage: React.FC<{}> = () => {
+  const [allNotices, setAllNotices] = useState<NoticeType[]>([]);
+  const [status, setStatus] = useState<Status>(Status.PENDING);
 
-  const [allNotices,setAllNotices] = useState<AppleType[]>([])
-  const [status,setStatus] = useState<Status>(Status.PENDING)
-
-  useEffect(()=>{
-    characters.getAll()
-    .then((response)=>{
-      setStatus(Status.SUCCESS)
-      setAllNotices(response.data.articles)
-    })
-    .catch((error)=> {
-      setStatus(Status.REJECTED)
-      console.log(error)
-    })
-  },[])
+  useEffect(() => {
+    characters
+      .getAll()
+      .then((response) => {
+        setStatus(Status.SUCCESS);
+        setAllNotices(response.data.articles);
+      })
+      .catch((error) => {
+        setStatus(Status.REJECTED);
+        console.log(error);
+      });
+  }, []);
 
   return (
-      <Container sx={{mt:9}} maxWidth="xl">
-        <HeaderComponent 
-          title="Titulo" 
-          description="Description" 
-          element={<Button variant="contained">Hello</Button>}/>
-        <Button>Show alert</Button>
-        <div>
-          {
-            status === Status.SUCCESS ? (
-              <Grid container spacing={2} direction="row">
-                {allNotices.map((notice)=>(
-                  <CardComponent author={notice.author} urlToImage={notice.urlToImage} content={notice.content}/>
-                ))}
+    <Container sx={{ mt: 9 }} maxWidth="xl">
+      <HeaderComponent
+        title="BITCOIN"
+        description="THE FUTURE"
+        element={<Button variant="contained">MORE</Button>}
+      />
+      <div style={{marginTop:"40px"}}>
+        {status === Status.SUCCESS ? (
+          <Grid container spacing={4} direction="row" sx={{justifyContent:"center"}}>
+            {allNotices.map((notice) => (
+              <Grid key={notice.title} item>
+                <CardComponent
+                  title={notice.title}
+                  urlToImage={notice.urlToImage}
+                  description={notice.description}
+                  url={notice.url}
+                />
               </Grid>
-            ) : ""
-          }
-        </div>
-      </Container>
-    )
-}
+            ))}
+          </Grid>
+        ) : (
+          ""
+        )}
+      </div>
+    </Container>
+  );
+};
