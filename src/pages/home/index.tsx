@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Button, Grid } from "@mui/material";
+import { Container, Button, Grid, Pagination, Box } from "@mui/material";
 import { CardComponent, HeaderComponent } from "../../components";
 import { characters } from "../../api/characters";
 import { NoticeType } from "./Interface/notice.interface";
@@ -27,6 +27,18 @@ export const HomePage: React.FC<{}> = () => {
       });
   }, []);
 
+  const [pageNum, setPageNum] = useState(1);
+  const [noticePage, setnoticePage] = useState(9);
+
+  const lastNotice = pageNum * noticePage;
+  const firstNotice = lastNotice - noticePage;
+  const currentNotice = allNotices.slice(firstNotice, lastNotice);
+  const count = Math.ceil(allNotices.length / 9)
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPageNum(value);
+    console.log(count)
+  };
+
   return (
     <Container sx={{ mt: 9 }} maxWidth="xl">
       <HeaderComponent
@@ -34,10 +46,18 @@ export const HomePage: React.FC<{}> = () => {
         description="THE FUTURE"
         element={<Button variant="contained">MORE</Button>}
       />
-      <div style={{marginTop:"40px"}}>
+      <div style={{ marginTop: "40px" }}>
+        <Box sx={{width:"100%",display:"flex",justifyContent:"center",mb:4, mt:4}}>
+          <Pagination count={count} color="primary" page={pageNum} onChange={handleChange}/>
+        </Box>
         {status === Status.SUCCESS ? (
-          <Grid container spacing={4} direction="row" sx={{justifyContent:"center"}}>
-            {allNotices.map((notice) => (
+          <Grid
+            container
+            spacing={4}
+            direction="row"
+            sx={{ justifyContent: "center" }}
+          >
+            {currentNotice.map((notice) => (
               <Grid key={notice.title} item>
                 <CardComponent
                   title={notice.title}
