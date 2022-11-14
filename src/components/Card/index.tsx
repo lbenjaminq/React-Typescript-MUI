@@ -9,12 +9,15 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
+import { useAppDispatch } from "../../redux/hooks";
+import { addToCart } from "../../redux/slices/cartSlice"
 
 type CharacterType = {
   title: string;
   urlToImage: string;
   description: string;
   url: string;
+  author:string;
 };
 
 export const CardComponent: React.FC<CharacterType> = ({
@@ -22,13 +25,21 @@ export const CardComponent: React.FC<CharacterType> = ({
   urlToImage,
   description,
   url,
+  author
 }) => {
+  
+  const dispatch = useAppDispatch()
+
   const truncate = (description: string, n: number) => {
     return description?.length > n
       ? `${description.substr(0, n - 1)}...`
       : description;
   };
 
+
+  const handleAddToCart = () => {
+    dispatch(addToCart({title,urlToImage,author}))
+  }
 
   return (
     <Card sx={{ height: 450, maxWidth: 400 }}>
@@ -61,6 +72,7 @@ export const CardComponent: React.FC<CharacterType> = ({
             Learn More
         </Button>
           </a>
+        <Button onClick={handleAddToCart}>Add to Cart</Button>
       </Box>
     </Card>
   );

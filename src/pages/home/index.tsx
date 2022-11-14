@@ -64,6 +64,7 @@ export const HomePage: React.FC<{}> = () => {
                   urlToImage={notice.urlToImage}
                   description={notice.description}
                   url={notice.url}
+                  author={notice.author}
                 />
               </Grid>
             ))}
